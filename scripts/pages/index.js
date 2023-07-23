@@ -12,6 +12,27 @@ function DisplayAllRecipes() {
     });
 }
 
+/** 
+ * Affichage les recettes 
+*/
+function DisplayRecipes(recipes, value) {
+    DisplayNbOfRescipes(recipes);
+
+    const recipesSection = document.getElementById("recipes-container");
+    recipesSection.innerHTML = "";
+
+    if (recipes.length == 0) {
+        recipesSection.innerHTML =
+            "<h2> Aucune recette ne contient «" + value + "» vous pouvez chercher «tarte aux pommes », « poisson », etc.</h2>"
+    } else {
+        recipes.forEach((recipe) => {
+            const recipeModel = recipeFactory(recipe);
+            const recipeDOM = recipeModel.getRecipeDOM();
+            recipesSection.appendChild(recipeDOM);
+        });
+    }
+}
+
 /**
  * affiche nb de recettes
  */
@@ -24,7 +45,7 @@ function DisplayNbOfRescipes(recipes) {
     } else if (nbRecettes > 1) {
         nbRecettesHtml.innerText = nbRecettes + " recettes";
     } else {
-        nbRecettesHtml.innerText = nbRecettes + "Aucune recette à afficher";
+        nbRecettesHtml.innerText = nbRecettes + " recettes";
     }
 }
 
@@ -49,8 +70,8 @@ function EventListeners() {
  */
 function ClickSearch() {
     const search_input = document.getElementById("search_bar_input");
-    if (search_input.value != "") {
-        console.log(search_input.value);
+    if (search_input.value != "" && search_input.value.length > 2) {
+        DisplayRecipes(FindRecipeFromInputSearch(search_input.value), search_input.value);
     }
 }
 
@@ -62,6 +83,7 @@ function Cancel() {
     search_input.value = "";
 
     DisparitionBtnCancel();
+    DisplayAllRecipes();
 }
 
 /**
