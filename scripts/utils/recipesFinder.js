@@ -1,33 +1,33 @@
-let inputTxt = "";
-
 function FindRecipeFromInputSearch(input) {
-    inputTxt = input;
-    const result = recipes.filter(RecipeContains);
-    return result;
-}
+    let inputTxtUpper = input.toUpperCase();
+    let recipesSelection = [];
+    const length = recipes.length;
 
-function RecipeContains(recipe) {
-    let argTrouve = false;
-    let inputTxtUpper = inputTxt.toUpperCase();
-
-    // recherche dans titre
-    let nameMaj = recipe.name.toUpperCase();
-    if (nameMaj.includes(inputTxtUpper)) {
-        argTrouve = true;
-    }
-
-    // recherche dans description
-    let descriptionMaj = recipe.description.toUpperCase();
-    if (descriptionMaj.includes(inputTxtUpper)) {
-        argTrouve = true;
-    }
-
-    // recherche dans ingredients
-    recipe.ingredients.forEach((ingredient) => {
-        let ingredientUpper = ingredient.ingredient.toUpperCase();
-        if (ingredientUpper.includes(inputTxtUpper)) {
-            argTrouve = true;
+    // pour chaque recette
+    for (let indexRecipe = 0; indexRecipe < length; indexRecipe++) {
+        // si le titre contient l'input
+        if (recipes[indexRecipe].name.toUpperCase().includes(inputTxtUpper)) {
+            // on l'ajoute à notre selection
+            recipesSelection.push(recipes[indexRecipe]);
+            // si la description contient l'input
+        } else if (recipes[indexRecipe].description.toUpperCase().includes(inputTxtUpper)) {
+            // on l'ajoute à notre selection
+            recipesSelection.push(recipes[indexRecipe]);
+            // sinon recherche dans ingredients
+        } else {
+            const ingredientsLength = recipes[indexRecipe].ingredients.length;
+            // pour chaque ingredient
+            for (let indexIngredient = 0; indexIngredient < ingredientsLength; indexIngredient++) {
+                // si l'ingredient contient l'input
+                if (recipes[indexRecipe].ingredients[indexIngredient].ingredient.toUpperCase().includes(inputTxtUpper)) {
+                    // on l'ajoute à notre selection
+                    recipesSelection.push(recipes[indexRecipe]);
+                    // et on sort de la boucle
+                    indexIngredient = ingredientsLength;
+                }
+            }
         }
-    });
-    return argTrouve;
+    }
+
+    return recipesSelection;
 }
