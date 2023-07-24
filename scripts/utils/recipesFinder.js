@@ -15,19 +15,18 @@ function RecipeContains(recipe) {
     if (nameMaj.includes(inputTxtUpper)) {
         argTrouve = true;
     }
-
     // recherche dans description
-    let descriptionMaj = recipe.description.toUpperCase();
-    if (descriptionMaj.includes(inputTxtUpper)) {
+    else if (recipe.description.toUpperCase().includes(inputTxtUpper)) {
         argTrouve = true;
+    } else {
+        // recherche dans ingredients
+        recipe.ingredients.forEach((ingredient) => {
+            let ingredientUpper = ingredient.ingredient.toUpperCase();
+            if (ingredientUpper.includes(inputTxtUpper)) {
+                argTrouve = true;
+            }
+        });
     }
 
-    // recherche dans ingredients
-    recipe.ingredients.forEach((ingredient) => {
-        let ingredientUpper = ingredient.ingredient.toUpperCase();
-        if (ingredientUpper.includes(inputTxtUpper)) {
-            argTrouve = true;
-        }
-    });
     return argTrouve;
 }
