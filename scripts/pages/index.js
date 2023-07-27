@@ -1,9 +1,21 @@
 let btnCancelHidden = false;
+
+/**
+ * Récupération des recettes depuis le fichier JSON
+ */
+async function GetRecipesFromJson() {
+    const reponse = await fetch("data/recipes.json");
+    const recipes = await reponse.json();
+
+    return recipes;
+}
+
 /** 
  * Affichage de toutes les recettes 
 */
-function DisplayAllRecipes() {
+function DisplayAllRecipes(recipes) {
     const recipesSection = document.getElementById("recipes-container");
+    recipesSection.innerHTML = "";
 
     recipes.forEach((recipe) => {
         const recipeModel = recipeFactory(recipe);
@@ -53,51 +65,49 @@ function DisplayNbOfRescipes(recipes) {
  * ajout d'EventListeners
  */
 function EventListeners() {
-    const search_btn = document.getElementById("search-btn");
-    search_btn.addEventListener("click", ClickSearch);
-
     const cancel_btn = document.getElementById("cancel");
     cancel_btn.addEventListener("click", Cancel);
 
     const search_bar_input = document.getElementById("search_bar_input");
-    search_bar_input.addEventListener("keyup", ApparitionBtnCancel);
+
+    search_bar_input.addEventListener("keyup", Search);
 
     DisparitionBtnCancel();
 }
 
 /**
- * click sur btn recherche
+ * fonction de recherche
  */
-function ClickSearch() {
+async function Search() {
     const search_input = document.getElementById("search_bar_input");
-    if (search_input.value != "" && search_input.value.length > 2) {
-        DisplayRecipes(FindRecipeFromInputSearch(search_input.value), search_input.value);
+    if (search_input.value == "") {
+        DisparitionBtnCancel();
+    } else {
+        if (btnCancelHidden) {
+            // apparition du btn annuler
+            const cancel_btn = document.getElementById("cancel");
+            cancel_btn.style["display"] = "block";
+            btnCancelHidden = false;
+        }
+        if (search_input.value.length > 2) {
+            // lancement de la recherche
+            DisplayRecipes(await FindRecipesFromInputSearch(search_input.value), search_input.value);
+        }
     }
 }
 
 /**
  * click sur btn annuler
  */
-function Cancel() {
+async function Cancel() {
     const search_input = document.getElementById("search_bar_input");
     search_input.value = "";
 
-    DisparitionBtnCancel();
-    DisplayAllRecipes();
-}
+    const recipesJson = await GetRecipesFromJson();
 
-/**
- * apparition du btn annuler
- */
-function ApparitionBtnCancel() {
-    const search_bar_input = document.getElementById("search_bar_input");
-    if (search_bar_input.value == "") {
-        DisparitionBtnCancel();
-    } else if (btnCancelHidden) {
-        const cancel_btn = document.getElementById("cancel");
-        cancel_btn.style["display"] = "block";
-        btnCancelHidden = false;
-    }
+    DisparitionBtnCancel();
+    DisplayNbOfRescipes(recipesJson.recipes);
+    DisplayAllRecipes(recipesJson.recipes);
 }
 
 /**
@@ -112,9 +122,10 @@ function DisparitionBtnCancel() {
 /**
  * Récupère toutes les recettes
  */
-function init() {
-    DisplayNbOfRescipes(recipes);
-    DisplayAllRecipes();
+async function init() {
+    const recipesJson = await GetRecipesFromJson();
+    DisplayNbOfRescipes(recipesJson.recipes);
+    DisplayAllRecipes(recipesJson.recipes);
     EventListeners();
 }
 
