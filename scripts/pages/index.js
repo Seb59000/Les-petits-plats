@@ -91,7 +91,9 @@ async function Search() {
         }
         if (search_input.value.length > 2) {
             // lancement de la recherche
-            DisplayRecipes(await FindRecipesFromInputSearch(search_input.value), search_input.value);
+            const filteredRecipes = await FindRecipesFromInputSearch(search_input.value);
+            DisplayRecipes(filteredRecipes, search_input.value);
+            PopulateListOfIngredientsFilters(filteredRecipes);
         }
     }
 }
@@ -108,6 +110,8 @@ async function Cancel() {
     DisparitionBtnCancel();
     DisplayNbOfRescipes(recipesJson.recipes);
     DisplayAllRecipes(recipesJson.recipes);
+    PopulateListOfIngredientsFilters(recipesJson.recipes);
+
 }
 
 /**
@@ -123,10 +127,11 @@ function DisparitionBtnCancel() {
  * Récupère toutes les recettes
  */
 async function init() {
+    EventListeners();
     const recipesJson = await GetRecipesFromJson();
     DisplayNbOfRescipes(recipesJson.recipes);
     DisplayAllRecipes(recipesJson.recipes);
-    EventListeners();
+    PopulateListOfIngredientsFilters(recipesJson.recipes);
 }
 
 init();

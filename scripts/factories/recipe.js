@@ -69,7 +69,6 @@ function recipeFactory(data) {
                     p2.innerText += " " + ingredient.unit;
                 }
             }
-
             div.appendChild(p);
             div.appendChild(p2);
 

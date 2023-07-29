@@ -19,11 +19,7 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
   <script src="https://kit.fontawesome.com/64434449ec.js" crossorigin="anonymous"></script>
 
-  <!--<link href="//netdna.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet">
-  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.6.3/css/bootstrap-select.min.css" />-->
-
   <link rel="stylesheet" type="text/css" href="./assets/css/style.css">
-
 </head>
 
 <body>
@@ -53,26 +49,27 @@
       <section id="filters">
         <div class="dropdowns">
           <div class="dropdown">
-            <button onclick="myFunction()" class="dropbtn">Ingrédients</button>
-            <div id="myDropdown" class="dropdown-content">
-              <input type="text" placeholder="Search.." id="myInput" onkeyup="filterFunction()">
-              <a href="#about">About</a>
-              <a href="#base">Base</a>
-              <a href="#blog">Blog</a>
-              <a href="#contact">Contact</a>
-              <a href="#custom">Custom</a>
-              <a href="#support">Support</a>
-              <a href="#tools">Tools</a>
+            <button id="ingredients-dropbtn" class="dropbtn"
+              onclick="document.querySelector('.dropdown-content').classList.toggle('scale')">Ingrédients
+              <span class="bi bi-chevron-down" id="ingredients-chevron-down"></span>
+              <span class="bi bi-chevron-up" id="ingredients-chevron-up"></span>
+            </button>
+            <div id="ingredients-dropdown" class="dropdown-content">
+              <div class="dropdown-search">
+                <input type="text" class="searchTag text-muted" id="ingredientTag">
+                <button type="button" id="cancel-ingredient" class="text-muted btn-small">
+                  <span class="sr-only">Annuler</span>
+                  <i class="bi bi-x-lg text-muted"></i>
+                </button>
+                <i class="bi bi-search mag text-muted" id="mag-ingredient"></i>
+              </div>
+              <div id="dropdown-list-ingredients" class="drop-list">
+              </div>
             </div>
           </div>
-          <select class="selectpicker" data-live-search="true" multiple>
-            <option data-tokens="ketchup mustard">Hot Dog, Fries and a Soda</option>
-            <option data-tokens="mustard">Burger, Shake and a Smile</option>
-            <option data-tokens="frosting">Sugar, Spice and all things nice</option>
-          </select>
         </div>
 
-        <div id="nb-recipes">50 recettes</div>
+        <div id="nb-recipes">recettes</div>
       </section>
 
       <!-- recipes -->
@@ -84,34 +81,9 @@
   </main>
   <script src="scripts/factories/recipe.js"></script>
   <script src="scripts/utils/recipesFinder.js"></script>
+  <script src="scripts/utils/tagManager.js"></script>
   <script src="scripts/pages/index.js"></script>
 
 </body>
-<!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
-<script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.6.3/js/bootstrap-select.min.js"></script>-->
-<script>
-  /* When the user clicks on the button,
-toggle between hiding and showing the dropdown content */
-  function myFunction() {
-    document.getElementById("myDropdown").classList.toggle("show");
-  }
-
-  function filterFunction() {
-    var input, filter, ul, li, a, i;
-    input = document.getElementById("myInput");
-    filter = input.value.toUpperCase();
-    div = document.getElementById("myDropdown");
-    a = div.getElementsByTagName("a");
-    for (i = 0; i < a.length; i++) {
-      txtValue = a[i].textContent || a[i].innerText;
-      if (txtValue.toUpperCase().indexOf(filter) > -1) {
-        a[i].style.display = "";
-      } else {
-        a[i].style.display = "none";
-      }
-    }
-  }
-</script>
 
 </html>
