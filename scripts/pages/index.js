@@ -66,7 +66,7 @@ function DisplayNbOfRescipes(recipes) {
  */
 function EventListeners() {
     const cancel_btn = document.getElementById("cancel");
-    cancel_btn.addEventListener("click", Cancel);
+    cancel_btn.addEventListener("click", CancelMainSearchInput);
 
     const search_bar_input = document.getElementById("search_bar_input");
 
@@ -99,9 +99,9 @@ async function Search() {
 }
 
 /**
- * click sur btn annuler
+ * click sur btn annuler main search_bar
  */
-async function Cancel() {
+async function CancelMainSearchInput() {
     const search_input = document.getElementById("search_bar_input");
     search_input.value = "";
 
@@ -111,7 +111,6 @@ async function Cancel() {
     DisplayNbOfRescipes(recipesJson.recipes);
     DisplayAllRecipes(recipesJson.recipes);
     PopulateListOfIngredientsFilters(recipesJson.recipes);
-
 }
 
 /**

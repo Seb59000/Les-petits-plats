@@ -1,5 +1,6 @@
 let btnIngredientCancelHidden = false;
-let listOfTagIngredient = [];
+let listOfFiltersIngredient = [];
+let listOfTagsIngredient = [];
 
 /* When the user clicks on the button,
 toggle between hiding and showing the dropdown content */
@@ -83,14 +84,14 @@ function SearchIngredients() {
  * remplissage de la liste des tag ingrédients 
  */
 function PopulateListOfIngredientsFilters(recipes) {
-    listOfTagIngredient = [];
+    listOfFiltersIngredient = [];
     recipes.forEach((recipe) => {
         const length = recipe.ingredients.length;
         for (let index = 0; index < length; index++) {
             AddToListOfIngredientsFilters(recipe.ingredients[index].ingredient);
         }
     });
-    listOfTagIngredient.sort();
+    listOfFiltersIngredient.sort();
     DisplayIngredientsFilters();
 }
 
@@ -98,8 +99,8 @@ function PopulateListOfIngredientsFilters(recipes) {
  * ajout des ingredients à la liste des tag ingrédients
  */
 function AddToListOfIngredientsFilters(ingredient) {
-    if (!listOfTagIngredient.includes(ingredient)) {
-        listOfTagIngredient.push(ingredient);
+    if (!listOfFiltersIngredient.includes(ingredient)) {
+        listOfFiltersIngredient.push(ingredient);
     }
 }
 
@@ -111,15 +112,72 @@ function DisplayIngredientsFilters() {
     filtersIngredients.innerHTML = "";
     const ul = document.createElement("ul");
 
-    listOfTagIngredient.forEach(ingredient => {
+    listOfFiltersIngredient.forEach(ingredient => {
         let li = document.createElement("li");
         let btn = document.createElement("button");
         btn.setAttribute("type", "button");
         btn.innerText = ingredient;
+        btn.addEventListener("click", ClickOnFilter);
+        btn.name = ingredient;
+        btn.codeTag = "ingredient";
         li.appendChild(btn);
         ul.appendChild(li);
     });
     filtersIngredients.appendChild(ul);
+}
+
+/**
+ * click ajout tags (ingredient, ustensile, appliance)
+ */
+function ClickOnFilter(event) {
+    switch (event.currentTarget.codeTag) {
+        // ingredients
+        case "ingredient":
+            // rech si tag est pas dejà dans la liste
+            if (!listOfTagsIngredient.includes(event.currentTarget.name)) {
+                listOfTagsIngredient.push(event.currentTarget.name);
+                const sectionTags = document.getElementById("tags");
+                const tagModel = tagFactory(event.currentTarget.name, event.currentTarget.codeTag);
+                const tagDOM = tagModel.getTagDOM();
+                sectionTags.appendChild(tagDOM);
+
+            }
+            break;
+
+        default:
+            break;
+    }
+
+}
+
+/**
+ * click sur btn cancel du tag
+ */
+function ClickCancelTag(event) {
+    switch (event.currentTarget.codeTag) {
+        case "ingredient":
+            const indexToRemove = listOfTagsIngredient.indexOf(event.currentTarget.name);
+            listOfTagsIngredient.splice(indexToRemove, 1);
+            break;
+
+        default:
+            break;
+    }
+    DisplayAllTags();
+}
+
+/**
+ * affichage de tous les tags
+ */
+function DisplayAllTags() {
+    const tagsSection = document.getElementById("tags");
+    tagsSection.innerHTML = "";
+    // pour chaque ingredient
+    listOfTagsIngredient.forEach(ingredient => {
+        const tagModel = tagFactory(ingredient, "ingredient");
+        const tagDOM = tagModel.getTagDOM();
+        tagsSection.appendChild(tagDOM);
+    });
 }
 
 /**
