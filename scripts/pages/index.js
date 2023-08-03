@@ -81,7 +81,7 @@ function EventListeners() {
 async function Search() {
     const search_input = document.getElementById("search_bar_input");
     if (search_input.value == "") {
-        DisparitionBtnCancel();
+        CancelMainSearchInput();
     } else {
         if (btnCancelHidden) {
             // apparition du btn annuler
@@ -92,8 +92,7 @@ async function Search() {
         if (search_input.value.length > 2) {
             // lancement de la recherche
             const filteredRecipes = await FindRecipesFromInputSearch(search_input.value);
-            DisplayRecipes(filteredRecipes, search_input.value);
-            PopulateListOfIngredientsFilters(filteredRecipes);
+            ApplyFiltersIngredient(filteredRecipes, search_input.value);
         }
     }
 }
@@ -102,15 +101,14 @@ async function Search() {
  * click sur btn annuler main search_bar
  */
 async function CancelMainSearchInput() {
+    DisparitionBtnCancel();
+    resultMainSearch = [];
+
     const search_input = document.getElementById("search_bar_input");
     search_input.value = "";
 
     const recipesJson = await GetRecipesFromJson();
-
-    DisparitionBtnCancel();
-    DisplayNbOfRescipes(recipesJson.recipes);
-    DisplayAllRecipes(recipesJson.recipes);
-    PopulateListOfIngredientsFilters(recipesJson.recipes);
+    ApplyFiltersIngredient(recipesJson.recipes, search_input.value);
 }
 
 /**

@@ -129,18 +129,27 @@ function DisplayIngredientsFilters() {
 /**
  * click ajout tags (ingredient, ustensile, appliance)
  */
-function ClickOnFilter(event) {
+async function ClickOnFilter(event) {
+    let name = event.currentTarget.name;
     switch (event.currentTarget.codeTag) {
         // ingredients
         case "ingredient":
             // rech si tag est pas dejà dans la liste
-            if (!listOfTagsIngredient.includes(event.currentTarget.name)) {
-                listOfTagsIngredient.push(event.currentTarget.name);
+            if (!listOfTagsIngredient.includes(name)) {
+                // ajout à la liste des tags
+                listOfTagsIngredient.push(name);
                 const sectionTags = document.getElementById("tags");
                 const tagModel = tagFactory(event.currentTarget.name, event.currentTarget.codeTag);
                 const tagDOM = tagModel.getTagDOM();
                 sectionTags.appendChild(tagDOM);
-
+                // lancement de la recherche
+                if (resultMainSearch.length == 0) {
+                    // si une recherche principale est dejà lancée
+                    const recipesJson = await GetRecipesFromJson();
+                    ApplyFiltersIngredient(recipesJson.recipes, name);
+                } else {
+                    ApplyFiltersIngredient(resultMainSearch, name);
+                }
             }
             break;
 
@@ -150,14 +159,48 @@ function ClickOnFilter(event) {
 
 }
 
+async function ApplyFiltersIngredient(recipes, lastFilterApplied) {
+    const recipesFiltered = recipes.filter(FilterIngredients);
+
+    DisplayRecipes(recipesFiltered, lastFilterApplied);
+    PopulateListOfIngredientsFilters(recipesFiltered);
+}
+
+function FilterIngredients(recipe) {
+    // si tous les tags sont dans la recette 
+    let argTrouve = listOfTagsIngredient.every(tag => {
+        // si un tag n'est pas présent dans la liste des ingredients de la recette on renvoie false
+        let tagDansRecette = false;
+        let indexIngredient = 0;
+        while (tagDansRecette == false & indexIngredient < recipe.ingredients.length) {
+            if (recipe.ingredients[indexIngredient].ingredient == tag) {
+                tagDansRecette = true;
+            }
+            indexIngredient++;
+        }
+        return tagDansRecette;
+    });
+
+    return argTrouve;
+}
+
 /**
  * click sur btn cancel du tag
  */
-function ClickCancelTag(event) {
+async function ClickCancelTag(event) {
     switch (event.currentTarget.codeTag) {
         case "ingredient":
+            // retrait de la liste des tags
             const indexToRemove = listOfTagsIngredient.indexOf(event.currentTarget.name);
             listOfTagsIngredient.splice(indexToRemove, 1);
+            // lancement de la recherche
+            if (resultMainSearch.length == 0) {
+                // si une recherche principale est dejà lancée
+                const recipesJson = await GetRecipesFromJson();
+                ApplyFiltersIngredient(recipesJson.recipes, name);
+            } else {
+                ApplyFiltersIngredient(resultMainSearch, name);
+            }
             break;
 
         default:
