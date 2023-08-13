@@ -1,11 +1,10 @@
 let inputTxt = "";
-let resultMainSearch = [];
 
 async function FindRecipesFromInputSearch(input) {
     inputTxt = input;
     const recipesJson = await GetRecipesFromJson();
-    resultMainSearch = recipesJson.recipes.filter(RecipeContains);
-    return resultMainSearch;
+    const result = recipesJson.recipes.filter(RecipeContains);
+    return result;
 }
 
 function RecipeContains(recipe) {
