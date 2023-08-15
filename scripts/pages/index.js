@@ -96,7 +96,7 @@ async function Search() {
         if (search_input.value.length > 2) {
             // lancement de la recherche
             const filteredRecipes = await FindRecipesFromInputSearch(search_input.value);
-            ApplyFiltersIngredient(filteredRecipes, search_input.value);
+            ApplyFilters(filteredRecipes, search_input.value);
         }
     }
 }
@@ -109,7 +109,7 @@ async function CancelMainSearchInput() {
     search_input.value = "";
 
     const recipesJson = await GetRecipesFromJson();
-    ApplyFiltersIngredient(recipesJson.recipes, search_input.value);
+    ApplyFilters(recipesJson.recipes, search_input.value);
 }
 
 /**
