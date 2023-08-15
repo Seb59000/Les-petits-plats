@@ -1,9 +1,13 @@
+import { recipeFactory } from "../factories/recipe.js";
+import { FindRecipesFromInputSearch, resultMainSearch } from "../utils/recipesFinder.js";
+import { ApplyFilters, PopulateListOfIngredientsFilters, PopulateListOfAppliancesFilters, PopulateListOfUstensilsFilters } from "../utils/tagManager.js";
+
 let btnCancelHidden = false;
 
 /**
  * Récupération des recettes depuis le fichier JSON
  */
-async function GetRecipesFromJson() {
+export async function GetRecipesFromJson() {
     const reponse = await fetch("data/recipes.json");
     const recipes = await reponse.json();
 
@@ -27,7 +31,7 @@ function DisplayAllRecipes(recipes) {
 /** 
  * Affichage les recettes 
 */
-function DisplayRecipes(recipes, value) {
+export function DisplayRecipes(recipes, value) {
     DisplayNbOfRescipes(recipes);
 
     const recipesSection = document.getElementById("recipes-container");
@@ -35,7 +39,7 @@ function DisplayRecipes(recipes, value) {
 
     if (recipes.length == 0) {
         recipesSection.innerHTML =
-            "<h2> Aucune recette ne contient «" + value + "» vous pouvez chercher «tarte aux pommes », « poisson », etc.</h2>"
+            "<h2> Aucune recette ne contient «" + value + "» vous pouvez chercher «tarte aux pommes », « poisson », etc.</h2>";
     } else {
         recipes.forEach((recipe) => {
             const recipeModel = recipeFactory(recipe);
@@ -92,8 +96,7 @@ async function Search() {
         if (search_input.value.length > 2) {
             // lancement de la recherche
             const filteredRecipes = await FindRecipesFromInputSearch(search_input.value);
-            DisplayRecipes(filteredRecipes, search_input.value);
-            PopulateListOfIngredientsFilters(filteredRecipes);
+            ApplyFiltersIngredient(filteredRecipes, search_input.value);
         }
     }
 }
@@ -106,11 +109,7 @@ async function CancelMainSearchInput() {
     search_input.value = "";
 
     const recipesJson = await GetRecipesFromJson();
-
-    DisparitionBtnCancel();
-    DisplayNbOfRescipes(recipesJson.recipes);
-    DisplayAllRecipes(recipesJson.recipes);
-    PopulateListOfIngredientsFilters(recipesJson.recipes);
+    ApplyFiltersIngredient(recipesJson.recipes, search_input.value);
 }
 
 /**
@@ -131,6 +130,8 @@ async function init() {
     DisplayNbOfRescipes(recipesJson.recipes);
     DisplayAllRecipes(recipesJson.recipes);
     PopulateListOfIngredientsFilters(recipesJson.recipes);
+    PopulateListOfAppliancesFilters(recipesJson.recipes);
+    PopulateListOfUstensilsFilters(recipesJson.recipes);
 }
 
 init();

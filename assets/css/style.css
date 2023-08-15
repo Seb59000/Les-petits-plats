@@ -21,11 +21,14 @@ header img {
 h1 {
   color: white;
   font-family: Anton;
-  padding: 2em 1.5em;
   font-size: 2rem;
   display: flex;
 }
 
+#title-container {
+  padding: 2em 1.5em;
+  display: flex;
+}
 
 #logo {
   margin-left: 5px;
@@ -111,7 +114,7 @@ main {
 #nb-recipes {
   font-family: Anton;
   font-size: 1.3rem;
-  margin-top: 0.4em;
+  margin-top: 1.4em;
 }
 
 /****** recipes ******/
@@ -184,6 +187,12 @@ h3 {
 }
 
 /* Dropdown Button */
+.dropdowns {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+
 .dropbtn {
   width: 14rem;
   background: white;
@@ -214,6 +223,7 @@ h3 {
 .dropdown {
   position: relative;
   display: inline-block;
+  margin: 1em 0;
 }
 
 /* Dropdown Content (Hidden by Default) */
@@ -277,7 +287,6 @@ h3 {
 }
 
 #tags {
-  padding: 1rem 0;
   margin: 0 -1rem;
   display: flex;
   flex-wrap: wrap;

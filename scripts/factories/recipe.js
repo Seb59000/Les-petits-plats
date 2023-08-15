@@ -1,6 +1,6 @@
 /** pattern factory */
-function recipeFactory(data) {
-    const { image, name, servings, ingredients, time, description, appliance, ustensils } = data;
+export function recipeFactory(data) {
+    const { image, name, ingredients, time, description } = data;
 
     // recettes constructor
     function getRecipeDOM() {

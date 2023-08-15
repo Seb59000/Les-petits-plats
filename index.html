@@ -24,20 +24,25 @@
 
   <!-- header -->
   <header>
-    <h1>LES PETITS PLATS<div id="logo">
+    <div id="title-container">
+      <h1>LES PETITS PLATS</h1>
+      <div id="logo">
         <div id="logo1"></div>
         <div id="logo2"></div>
       </div>
-    </h1>
+    </div>
+
     <p class="col-md-8 offset-md-2">CHERCHEZ PARMI PLUS DE 1500 RECETTES DU QUOTIDIEN, SIMPLES ET DÉLICIEUSES</p>
     <div class="search col-md-8 offset-md-2">
       <form class="search_bar" action="#" method="get">
+        <label for="search_bar_input" class="sr-only">recherche dans la recette et les ingrédients</label>
         <input type="text" name="search_bar_input" id="search_bar_input"
           placeholder="Rechercher une recette, un ingrédient, ... ">
+        <label for="cancel" class="sr-only">Annuler recherche</label>
         <button type="button" id="cancel" class="btn text-muted">
-          <div class="sr-only">Annuler recherche</div><i class="bi bi-x-lg"></i>
+          <em class="bi bi-x-lg"></em>
         </button>
-        <i class="btn btn-black bi bi-search"></i>
+        <em class="btn btn-black bi bi-search"></em>
       </form>
     </div>
   </header>
@@ -45,8 +50,8 @@
   <main>
     <div class="recipes-container">
       <!-- filters -->
-      <section id="filters">
-        <div class="dropdowns">
+      <div id="filters">
+        <div class="dropdowns col-sm-10 col-lg-10 col-xl-7">
           <div class="dropdown">
             <button id="ingredients-dropbtn" class="dropbtn">Ingrédients
               <span class="bi bi-chevron-down" id="ingredients-chevron-down"></span>
@@ -54,27 +59,66 @@
             </button>
             <div id="ingredients-dropdown" class="dropdown-content">
               <div class="dropdown-search">
-                <input type="text" class="searchTag text-muted" id="ingredientTag">
+                <label for="ingredient-search" class="sr-only">recherche dans les ingrédients</label>
+                <input type="text" class="searchTag text-muted" id="ingredient-search" title="ingredient-search">
+                <label for="cancel-ingredient" class="sr-only">Annuler</label>
                 <button type="button" id="cancel-ingredient" class="text-muted btn-small">
-                  <span class="sr-only">Annuler</span>
-                  <i class="bi bi-x-lg text-muted"></i>
+                  <em class="bi bi-x-lg text-muted"></em>
                 </button>
-                <i class="bi bi-search mag text-muted" id="mag-ingredient"></i>
+                <em class="bi bi-search mag text-muted" id="mag-ingredient"></em>
               </div>
               <div id="dropdown-list-ingredients" class="drop-list">
               </div>
             </div>
           </div>
+          <div class="dropdown">
+            <button id="appliance-dropbtn" class="dropbtn">Appareils
+              <span class="bi bi-chevron-down" id="appliance-chevron-down"></span>
+              <span class="bi bi-chevron-up" id="appliance-chevron-up"></span>
+            </button>
+            <div id="appliance-dropdown" class="dropdown-content">
+              <div class="dropdown-search">
+                <label for="appliance-search" class="sr-only">recherche dans les appareils</label>
+                <input type="text" class="searchTag text-muted" id="appliance-search" title="appliance-search">
+                <label for="cancel-appliance" class="sr-only">Annuler</label>
+                <button type="button" id="cancel-appliance" class="text-muted btn-small">
+                  <em class="bi bi-x-lg text-muted"></em>
+                </button>
+                <em class="bi bi-search mag text-muted" id="mag-appliance"></em>
+              </div>
+              <div id="dropdown-list-appliance" class="drop-list">
+              </div>
+            </div>
+          </div>
+          <div class="dropdown">
+            <button id="ustensils-dropbtn" class="dropbtn">Ustensiles
+              <span class="bi bi-chevron-down" id="ustensils-chevron-down"></span>
+              <span class="bi bi-chevron-up" id="ustensils-chevron-up"></span>
+            </button>
+            <div id="ustensils-dropdown" class="dropdown-content">
+              <div class="dropdown-search">
+                <label for="ustensils-search" class="sr-only">recherche dans les ustensiles</label>
+                <input type="text" class="searchTag text-muted" id="ustensils-search" title="ustensils-search">
+                <label for="cancel-ustensils" class="sr-only">Annuler</label>
+                <button type="button" id="cancel-ustensils" class="text-muted btn-small">
+                  <em class="bi bi-x-lg text-muted"></em>
+                </button>
+                <em class="bi bi-search mag text-muted" id="mag-ustensils"></em>
+              </div>
+              <div id="dropdown-list-ustensils" class="drop-list">
+              </div>
+            </div>
+          </div>
         </div>
-        <div id="nb-recipes">recettes</div>
-      </section>
+        <div id="nb-recipes" class="">recettes</div>
+      </div>
       <!-- tags -->
-      <section id="tags"></section>
+      <div id="tags"></div>
       <!-- recipes -->
-      <section id="recipes">
+      <div id="recipes">
         <div class="row row-cols-1 row-cols-md-3 g-5" id="recipes-container">
         </div>
-      </section>
+      </div>
     </div>
   </main>
   <script src="scripts/factories/recipe.js"></script>
