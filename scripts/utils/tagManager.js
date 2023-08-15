@@ -377,11 +377,8 @@ async function ClickOnFilter(event) {
             if (!listOfTagsIngredient.includes(name)) {
                 // ajout à la liste des tags
                 listOfTagsIngredient.push(name);
-                // affichage
-                const sectionTags = document.getElementById("tags");
-                const tagModel = tagFactory(event.currentTarget.name, event.currentTarget.codeTag);
-                const tagDOM = tagModel.getTagDOM();
-                sectionTags.appendChild(tagDOM);
+                // affichage du tag
+                DisplayTag(event);
             }
             break;
         // appareil
@@ -390,26 +387,20 @@ async function ClickOnFilter(event) {
             if (tagAppliance == "") {
                 // ajout à la liste des tags
                 tagAppliance = name;
-                // affichage
-                const sectionTags = document.getElementById("tags");
-                const tagModel = tagFactory(event.currentTarget.name, event.currentTarget.codeTag);
-                const tagDOM = tagModel.getTagDOM();
-                sectionTags.appendChild(tagDOM);
+                // affichage du tag
+                DisplayTag(event);
             }
             break;
         // ustensile
         case "ustensil":
             // rech si tag est pas dejà dans la liste
-            if (!listOfTagsIngredient.includes(name)) {
-                // ajout à la liste des tags
-                listOfTagsIngredient.push(name);
-                const sectionTags = document.getElementById("tags");
-                const tagModel = tagFactory(event.currentTarget.name, event.currentTarget.codeTag);
-                const tagDOM = tagModel.getTagDOM();
-                sectionTags.appendChild(tagDOM);
+            if (!listOfTagsUstensils.includes(name)) {
+                // ajout à la liste des tags ustensiles
+                listOfTagsUstensils.push(name);
+                // affichage du tag
+                DisplayTag(event);
             }
             break;
-
         default:
             break;
     }
@@ -423,6 +414,13 @@ async function ClickOnFilter(event) {
     }
 }
 
+function DisplayTag(event) {
+    const sectionTags = document.getElementById("tags");
+    const tagModel = tagFactory(event.currentTarget.name, event.currentTarget.codeTag);
+    const tagDOM = tagModel.getTagDOM();
+    sectionTags.appendChild(tagDOM);
+}
+
 /**
  * Applique les filtres à la recherche
  */
@@ -434,11 +432,13 @@ async function ApplyFilters(recipes, lastFilterApplied) {
     } else {
         recipesApplianceFiltered = recipesIngredientFiltered;
     }
+    const recipesUstensilsFiltered = recipesApplianceFiltered.filter(FilterUstensils);
+    listOfTagsUstensils
 
-    DisplayRecipes(recipesApplianceFiltered, lastFilterApplied);
-    PopulateListOfIngredientsFilters(recipesApplianceFiltered);
-    PopulateListOfAppliancesFilters(recipesApplianceFiltered);
-    PopulateListOfUstensilsFilters(recipesApplianceFiltered);
+    DisplayRecipes(recipesUstensilsFiltered, lastFilterApplied);
+    PopulateListOfIngredientsFilters(recipesUstensilsFiltered);
+    PopulateListOfAppliancesFilters(recipesUstensilsFiltered);
+    PopulateListOfUstensilsFilters(recipesUstensilsFiltered);
 }
 
 /**
@@ -469,20 +469,44 @@ function FilterAppliances(recipe) {
 }
 
 /**
+ * si un tag n'est pas présent dans la liste des ingredients de la recette on renvoie false
+ */
+function FilterUstensils(recipe) {
+    // si tous les tags sont dans la recette 
+    let argTrouve = listOfTagsUstensils.every(tag => {
+        let tagDansRecette = false;
+        let indexUstensil = 0;
+        while (tagDansRecette == false & indexUstensil < recipe.ustensils.length) {
+            if (recipe.ustensils[indexUstensil] == tag) {
+                tagDansRecette = true;
+            }
+            indexUstensil++;
+        }
+        return tagDansRecette;
+    });
+
+    return argTrouve;
+}
+
+/**
  * click sur btn cancel du tag
  */
 async function ClickCancelTag(event) {
     let name = event.currentTarget.name;
     switch (event.currentTarget.codeTag) {
         case "ingredient":
-            // retrait de la liste des tags
+            // retrait de la liste des tags ingredients
             const indexToRemove = listOfTagsIngredient.indexOf(event.currentTarget.name);
             listOfTagsIngredient.splice(indexToRemove, 1);
-
             break;
         case "appliance":
             // retrait du tag
             tagAppliance = "";
+            break;
+        case "ustensil":
+            // retrait de la liste des tags ustensiles
+            const indexUstensilToRemove = listOfTagsUstensils.indexOf(event.currentTarget.name);
+            listOfTagsUstensils.splice(indexUstensilToRemove, 1);
             break;
         default:
             break;

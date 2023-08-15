@@ -2,8 +2,6 @@
 // import { FindRecipesFromInputSearch, resultMainSearch } from "../utils/recipesFinder.js";
 // import { ApplyFilters, PopulateListOfIngredientsFilters, PopulateListOfAppliancesFilters, PopulateListOfUstensilsFilters } from "../utils/tagManager.js";
 
-let btnCancelHidden = false;
-
 /**
  * Récupération des recettes depuis le fichier JSON
  */
@@ -15,21 +13,7 @@ async function GetRecipesFromJson() {
 }
 
 /** 
- * Affichage de toutes les recettes 
-*/
-function DisplayAllRecipes(recipes) {
-    const recipesSection = document.getElementById("recipes-container");
-    recipesSection.innerHTML = "";
-
-    recipes.forEach((recipe) => {
-        const recipeModel = recipeFactory(recipe);
-        const recipeDOM = recipeModel.getRecipeDOM();
-        recipesSection.appendChild(recipeDOM);
-    });
-}
-
-/** 
- * Affichage les recettes 
+ * Affichage des recettes 
 */
 function DisplayRecipes(recipes, value) {
     DisplayNbOfRescipes(recipes);
@@ -80,58 +64,22 @@ function EventListeners() {
 }
 
 /**
- * fonction de recherche
- */
-async function Search() {
-    const search_input = document.getElementById("search_bar_input");
-    if (search_input.value == "") {
-        DisparitionBtnCancel();
-    } else {
-        if (btnCancelHidden) {
-            // apparition du btn annuler
-            const cancel_btn = document.getElementById("cancel");
-            cancel_btn.style["display"] = "block";
-            btnCancelHidden = false;
-        }
-        if (search_input.value.length > 2) {
-            // lancement de la recherche
-            const filteredRecipes = await FindRecipesFromInputSearch(search_input.value);
-            ApplyFilters(filteredRecipes, search_input.value);
-        }
-    }
-}
-
-/**
- * click sur btn annuler main search_bar
- */
-async function CancelMainSearchInput() {
-    const search_input = document.getElementById("search_bar_input");
-    search_input.value = "";
-
-    const recipesJson = await GetRecipesFromJson();
-    ApplyFilters(recipesJson.recipes, search_input.value);
-}
-
-/**
- * Disparition du btn annuler
- */
-function DisparitionBtnCancel() {
-    const cancel_btn = document.getElementById("cancel");
-    cancel_btn.style["display"] = "none";
-    btnCancelHidden = true;
-}
-
-/**
- * Récupère toutes les recettes
+ * Récupère toutes les recettes et les affiche
  */
 async function init() {
     EventListeners();
     const recipesJson = await GetRecipesFromJson();
-    DisplayNbOfRescipes(recipesJson.recipes);
-    DisplayAllRecipes(recipesJson.recipes);
+    DisplayRecipes(recipesJson.recipes, "");
+    PopulateFilters(recipesJson);
+}
+
+init();
+
+/**
+ * remplie les listes de filtres dispo
+ */
+function PopulateFilters(recipesJson) {
     PopulateListOfIngredientsFilters(recipesJson.recipes);
     PopulateListOfAppliancesFilters(recipesJson.recipes);
     PopulateListOfUstensilsFilters(recipesJson.recipes);
 }
-
-init();
