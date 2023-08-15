@@ -1,7 +1,7 @@
-import { ClickCancelTag } from "../utils/tagManager.js";
+// import { ClickCancelTag } from "../utils/tagManager.js";
 
 /** pattern factory */
-export function tagFactory(tagName, type) {
+function tagFactory(tagName, type) {
     // tag constructor
     function getTagDOM() {
         const tag = document.createElement("div");

@@ -1,9 +1,9 @@
-import { GetRecipesFromJson } from "../pages/index.js";
+// import { GetRecipesFromJson } from "../pages/index.js";
 
 let inputTxt = "";
 let resultMainSearch = [];
 
-export async function FindRecipesFromInputSearch(input) {
+async function FindRecipesFromInputSearch(input) {
     inputTxt = input;
     const recipesJson = await GetRecipesFromJson();
     const result = recipesJson.recipes.filter(RecipeContains);

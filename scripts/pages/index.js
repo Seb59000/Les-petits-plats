@@ -1,13 +1,13 @@
-import { recipeFactory } from "../factories/recipe.js";
-import { FindRecipesFromInputSearch, resultMainSearch } from "../utils/recipesFinder.js";
-import { ApplyFilters, PopulateListOfIngredientsFilters, PopulateListOfAppliancesFilters, PopulateListOfUstensilsFilters } from "../utils/tagManager.js";
+// import { recipeFactory } from "../factories/recipe.js";
+// import { FindRecipesFromInputSearch, resultMainSearch } from "../utils/recipesFinder.js";
+// import { ApplyFilters, PopulateListOfIngredientsFilters, PopulateListOfAppliancesFilters, PopulateListOfUstensilsFilters } from "../utils/tagManager.js";
 
 let btnCancelHidden = false;
 
 /**
  * Récupération des recettes depuis le fichier JSON
  */
-export async function GetRecipesFromJson() {
+async function GetRecipesFromJson() {
     const reponse = await fetch("data/recipes.json");
     const recipes = await reponse.json();
 
@@ -31,7 +31,7 @@ function DisplayAllRecipes(recipes) {
 /** 
  * Affichage les recettes 
 */
-export function DisplayRecipes(recipes, value) {
+function DisplayRecipes(recipes, value) {
     DisplayNbOfRescipes(recipes);
 
     const recipesSection = document.getElementById("recipes-container");
