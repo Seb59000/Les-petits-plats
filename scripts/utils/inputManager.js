@@ -1,8 +1,13 @@
-// import { GetRecipesFromJson } from "../pages/index.js";
+import { ApplyFilters } from "./tagManager.js";
+import { GetRecipesFromJson } from "../pages/index.js";
+
 let btnCancelHidden = false;
 let inputTxt = "";
-let resultMainSearch = [];
+export let resultMainSearch = [];
 
+/**
+ * trouve les recettes contenant les mots clés issus du champs de rech principal
+ */
 async function FindRecipesFromInputSearch(input) {
     inputTxt = input;
     const recipesJson = await GetRecipesFromJson();
@@ -11,6 +16,9 @@ async function FindRecipesFromInputSearch(input) {
     return result;
 }
 
+/**
+ * determine si contient mot clé
+ */
 function RecipeContains(recipe) {
     let argTrouve = false;
     let inputTxtUpper = inputTxt.toUpperCase();
@@ -80,3 +88,15 @@ function DisparitionBtnCancel() {
     btnCancelHidden = true;
 }
 
+/**
+ * ajout d'EventListeners
+ */
+export function EventListenersSearch() {
+    const cancel_btn = document.getElementById("cancel");
+    cancel_btn.addEventListener("click", CancelMainSearchInput);
+
+    const search_bar_input = document.getElementById("search_bar_input");
+    search_bar_input.addEventListener("keyup", Search);
+
+    DisparitionBtnCancel();
+}

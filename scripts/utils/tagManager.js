@@ -1,6 +1,6 @@
-// import { DisplayRecipes, GetRecipesFromJson } from "../pages/index.js";
-// import { tagFactory } from "../factories/tags.js";
-// import { resultMainSearch } from "../utils/recipesFinder.js";
+import { DisplayRecipes, GetRecipesFromJson } from "../pages/index.js";
+import { tagFactory } from "../factories/tags.js";
+import { resultMainSearch } from "./inputManager.js";
 
 let btnIngredientCancelHidden = false;
 let btnApplianceCancelHidden = false;
@@ -39,7 +39,7 @@ function ShowUstensilsDropDown() {
 /**
  * ajout d'EventListeners
  */
-function EventListeners() {
+function EventListenersFilters() {
     const ingredientsDropbtn = document.getElementById("ingredients-dropbtn");
     ingredientsDropbtn.addEventListener("click", ShowIngredientsDropDown);
     const applianceDropbtn = document.getElementById("appliance-dropbtn");
@@ -231,6 +231,15 @@ function SearchUstensil() {
 }
 
 /**
+ * remplie les listes de filtres dispo
+ */
+export function PopulateFilters(recipes) {
+    PopulateListOfIngredientsFilters(recipes);
+    PopulateListOfAppliancesFilters(recipes);
+    PopulateListOfUstensilsFilters(recipes);
+}
+
+/**
  * remplissage de la liste des tag ingrédients 
  */
 function PopulateListOfIngredientsFilters(recipes) {
@@ -414,6 +423,9 @@ async function ClickOnFilter(event) {
     }
 }
 
+/**
+ * Affichage de tag
+ */
 function DisplayTag(event) {
     const sectionTags = document.getElementById("tags");
     const tagModel = tagFactory(event.currentTarget.name, event.currentTarget.codeTag);
@@ -424,7 +436,7 @@ function DisplayTag(event) {
 /**
  * Applique les filtres à la recherche
  */
-async function ApplyFilters(recipes, lastFilterApplied) {
+export async function ApplyFilters(recipes, lastFilterApplied) {
     const recipesIngredientFiltered = recipes.filter(FilterIngredients);
     let recipesApplianceFiltered;
     if (tagAppliance != "") {
@@ -436,9 +448,7 @@ async function ApplyFilters(recipes, lastFilterApplied) {
     listOfTagsUstensils
 
     DisplayRecipes(recipesUstensilsFiltered, lastFilterApplied);
-    PopulateListOfIngredientsFilters(recipesUstensilsFiltered);
-    PopulateListOfAppliancesFilters(recipesUstensilsFiltered);
-    PopulateListOfUstensilsFilters(recipesUstensilsFiltered);
+    PopulateFilters(recipesUstensilsFiltered);
 }
 
 /**
@@ -491,7 +501,7 @@ function FilterUstensils(recipe) {
 /**
  * click sur btn cancel du tag
  */
-async function ClickCancelTag(event) {
+export async function ClickCancelTag(event) {
     let name = event.currentTarget.name;
     switch (event.currentTarget.codeTag) {
         case "ingredient":
@@ -551,11 +561,10 @@ function DisplayAllTags() {
 /**
  * initialisation des filtres
  */
-function Init() {
-    EventListeners();
+export function InitFilters(recipes) {
+    EventListenersFilters();
     DisparitionBtnCancelIngredients();
     DisparitionBtnCancelAppliance();
     DisparitionBtnCancelUstensils();
+    PopulateFilters(recipes);
 }
-
-Init();
