@@ -91,7 +91,7 @@ function DisparitionBtnCancel() {
 /**
  * ajout d'EventListeners
  */
-export function EventListenersSearch() {
+export function EventListenersMainSearch() {
     const cancel_btn = document.getElementById("cancel");
     cancel_btn.addEventListener("click", CancelMainSearchInput);
 

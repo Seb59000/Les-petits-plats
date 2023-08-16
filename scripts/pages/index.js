@@ -1,5 +1,5 @@
 import { recipeFactory } from "../factories/recipe.js";
-import { EventListenersSearch } from "../utils/inputManager.js";
+import { EventListenersMainSearch } from "../utils/mainSearchManager.js";
 import { InitFilters } from "../utils/tagManager.js";
 
 /**
@@ -53,7 +53,7 @@ function DisplayNbOfRescipes(recipes) {
  * Récupère toutes les recettes et les affiche
  */
 async function init() {
-    EventListenersSearch();
+    EventListenersMainSearch();
     const recipesJson = await GetRecipesFromJson();
     DisplayRecipes(recipesJson.recipes, "");
     InitFilters(recipesJson.recipes);

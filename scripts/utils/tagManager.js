@@ -1,6 +1,6 @@
 import { DisplayRecipes, GetRecipesFromJson } from "../pages/index.js";
 import { tagFactory } from "../factories/tags.js";
-import { resultMainSearch } from "./inputManager.js";
+import { resultMainSearch } from "./mainSearchManager.js";
 
 let btnIngredientCancelHidden = false;
 let btnApplianceCancelHidden = false;
@@ -291,7 +291,7 @@ function AddToListOfIngredientsFilters(ingredient) {
 }
 
 /**
- * ajout des appliance à la liste des tag appliance
+ * ajout des appareils à la liste des tag appliance
  */
 function AddToListOfAppliancesFilters(appliance) {
     if (!listOfFiltersAppliance.includes(appliance)) {
@@ -300,7 +300,7 @@ function AddToListOfAppliancesFilters(appliance) {
 }
 
 /**
- * ajout des appliance à la liste des tag ustensiles
+ * ajout des ustensiles à la liste des tag ustensiles
  */
 function AddToListOfUstensilsFilters(ustensil) {
     if (!listOfFiltersUstensils.includes(ustensil)) {
@@ -445,7 +445,6 @@ export async function ApplyFilters(recipes, lastFilterApplied) {
         recipesApplianceFiltered = recipesIngredientFiltered;
     }
     const recipesUstensilsFiltered = recipesApplianceFiltered.filter(FilterUstensils);
-    listOfTagsUstensils
 
     DisplayRecipes(recipesUstensilsFiltered, lastFilterApplied);
     PopulateFilters(recipesUstensilsFiltered);
@@ -503,10 +502,13 @@ function FilterUstensils(recipe) {
  */
 export async function ClickCancelTag(event) {
     let name = event.currentTarget.name;
+    let indexToRemove;
+    let indexUstensilToRemove;
+
     switch (event.currentTarget.codeTag) {
         case "ingredient":
             // retrait de la liste des tags ingredients
-            const indexToRemove = listOfTagsIngredient.indexOf(event.currentTarget.name);
+            indexToRemove = listOfTagsIngredient.indexOf(event.currentTarget.name);
             listOfTagsIngredient.splice(indexToRemove, 1);
             break;
         case "appliance":
@@ -515,7 +517,7 @@ export async function ClickCancelTag(event) {
             break;
         case "ustensil":
             // retrait de la liste des tags ustensiles
-            const indexUstensilToRemove = listOfTagsUstensils.indexOf(event.currentTarget.name);
+            indexUstensilToRemove = listOfTagsUstensils.indexOf(event.currentTarget.name);
             listOfTagsUstensils.splice(indexUstensilToRemove, 1);
             break;
         default:
