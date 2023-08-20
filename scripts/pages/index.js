@@ -1,9 +1,11 @@
-let btnCancelHidden = false;
+import { recipeFactory } from "../factories/recipe.js";
+import { EventListenersMainSearch } from "../utils/mainSearchManager.js";
+import { InitFilters } from "../utils/tagManager.js";
 
 /**
  * Récupération des recettes depuis le fichier JSON
  */
-async function GetRecipesFromJson() {
+export async function GetRecipesFromJson() {
     const reponse = await fetch("data/recipes.json");
     const recipes = await reponse.json();
 
@@ -11,23 +13,9 @@ async function GetRecipesFromJson() {
 }
 
 /** 
- * Affichage de toutes les recettes 
+ * Affichage des recettes 
 */
-function DisplayAllRecipes(recipes) {
-    const recipesSection = document.getElementById("recipes-container");
-    recipesSection.innerHTML = "";
-
-    recipes.forEach((recipe) => {
-        const recipeModel = recipeFactory(recipe);
-        const recipeDOM = recipeModel.getRecipeDOM();
-        recipesSection.appendChild(recipeDOM);
-    });
-}
-
-/** 
- * Affichage les recettes 
-*/
-function DisplayRecipes(recipes, value) {
+export function DisplayRecipes(recipes, value) {
     DisplayNbOfRescipes(recipes);
 
     const recipesSection = document.getElementById("recipes-container");
@@ -35,7 +23,7 @@ function DisplayRecipes(recipes, value) {
 
     if (recipes.length == 0) {
         recipesSection.innerHTML =
-            "<h2> Aucune recette ne contient «" + value + "» vous pouvez chercher «tarte aux pommes », « poisson », etc.</h2>"
+            "<h2> Aucune recette ne contient «" + value + "» vous pouvez chercher «tarte aux pommes », « poisson », etc.</h2>";
     } else {
         recipes.forEach((recipe) => {
             const recipeModel = recipeFactory(recipe);
@@ -62,71 +50,13 @@ function DisplayNbOfRescipes(recipes) {
 }
 
 /**
- * ajout d'EventListeners
- */
-function EventListeners() {
-    const cancel_btn = document.getElementById("cancel");
-    cancel_btn.addEventListener("click", Cancel);
-
-    const search_bar_input = document.getElementById("search_bar_input");
-
-    search_bar_input.addEventListener("keyup", Search);
-
-    DisparitionBtnCancel();
-}
-
-/**
- * fonction de recherche
- */
-async function Search() {
-    const search_input = document.getElementById("search_bar_input");
-    if (search_input.value == "") {
-        DisparitionBtnCancel();
-    } else {
-        if (btnCancelHidden) {
-            // apparition du btn annuler
-            const cancel_btn = document.getElementById("cancel");
-            cancel_btn.style["display"] = "block";
-            btnCancelHidden = false;
-        }
-        if (search_input.value.length > 2) {
-            // lancement de la recherche
-            DisplayRecipes(await FindRecipesFromInputSearch(search_input.value), search_input.value);
-        }
-    }
-}
-
-/**
- * click sur btn annuler
- */
-async function Cancel() {
-    const search_input = document.getElementById("search_bar_input");
-    search_input.value = "";
-
-    const recipesJson = await GetRecipesFromJson();
-
-    DisparitionBtnCancel();
-    DisplayNbOfRescipes(recipesJson.recipes);
-    DisplayAllRecipes(recipesJson.recipes);
-}
-
-/**
- * Disparition du btn annuler
- */
-function DisparitionBtnCancel() {
-    const cancel_btn = document.getElementById("cancel");
-    cancel_btn.style["display"] = "none";
-    btnCancelHidden = true;
-}
-
-/**
- * Récupère toutes les recettes
+ * Récupère toutes les recettes et les affiche
  */
 async function init() {
+    EventListenersMainSearch();
     const recipesJson = await GetRecipesFromJson();
-    DisplayNbOfRescipes(recipesJson.recipes);
-    DisplayAllRecipes(recipesJson.recipes);
-    EventListeners();
+    DisplayRecipes(recipesJson.recipes, "");
+    InitFilters(recipesJson.recipes);
 }
 
 init();
