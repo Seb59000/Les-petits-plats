@@ -2,7 +2,6 @@ import { ApplyFilters } from "./tagManager.js";
 import { GetRecipesFromJson } from "../pages/index.js";
 
 let btnCancelHidden = false;
-let inputTxt = "";
 export let resultMainSearch = [];
 
 /**
