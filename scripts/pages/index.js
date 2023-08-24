@@ -11,20 +11,6 @@ export async function GetRecipesFromJson() {
 }
 
 /** 
- * Affichage des recettes 
-*/
-function DisplayAllRecipes(recipes) {
-    const recipesSection = document.getElementById("recipes-container");
-    recipesSection.innerHTML = "";
-
-    recipes.forEach((recipe) => {
-        const recipeModel = recipeFactory(recipe);
-        const recipeDOM = recipeModel.getRecipeDOM();
-        recipesSection.appendChild(recipeDOM);
-    });
-}
-
-/** 
  * Affichage les recettes 
 */
 function DisplayRecipes(recipes, value) {

@@ -6,42 +6,43 @@ let inputTxt = "";
 export let resultMainSearch = [];
 
 /**
- * trouve les recettes contenant les mots clés issus du champs de rech principal
+ * Renvoie les recettes qui contiennent l'input dans leur titre, recette ou ingrédients
  */
 async function FindRecipesFromInputSearch(input) {
-    inputTxt = input;
+    let inputTxtUpper = input.toUpperCase();
+    let recipesSelection = [];
+
     const recipesJson = await GetRecipesFromJson();
-    const result = recipesJson.recipes.filter(RecipeContains);
-    resultMainSearch = result;
-    return result;
-}
 
-/**
- * determine si contient mot clé
- */
-function RecipeContains(recipe) {
-    let argTrouve = false;
-    let inputTxtUpper = inputTxt.toUpperCase();
+    const length = recipesJson.recipes.length;
 
-    // recherche dans titre
-    let nameMaj = recipe.name.toUpperCase();
-    if (nameMaj.includes(inputTxtUpper)) {
-        argTrouve = true;
-    }
-    // recherche dans description
-    else if (recipe.description.toUpperCase().includes(inputTxtUpper)) {
-        argTrouve = true;
-    } else {
-        // recherche dans ingredients
-        recipe.ingredients.forEach((ingredient) => {
-            let ingredientUpper = ingredient.ingredient.toUpperCase();
-            if (ingredientUpper.includes(inputTxtUpper)) {
-                argTrouve = true;
+    // pour chaque recette
+    for (let indexRecipe = 0; indexRecipe < length; indexRecipe++) {
+        // si le titre contient l'input
+        if (recipesJson.recipes[indexRecipe].name.toUpperCase().includes(inputTxtUpper)) {
+            // on l'ajoute à notre selection
+            recipesSelection.push(recipesJson.recipes[indexRecipe]);
+            // si la description contient l'input
+        } else if (recipesJson.recipes[indexRecipe].description.toUpperCase().includes(inputTxtUpper)) {
+            // on l'ajoute à notre selection
+            recipesSelection.push(recipesJson.recipes[indexRecipe]);
+            // sinon recherche dans ingredients
+        } else {
+            const ingredientsLength = recipesJson.recipes[indexRecipe].ingredients.length;
+            // pour chaque ingredient
+            for (let indexIngredient = 0; indexIngredient < ingredientsLength; indexIngredient++) {
+                // si l'ingredient contient l'input
+                if (recipesJson.recipes[indexRecipe].ingredients[indexIngredient].ingredient.toUpperCase().includes(inputTxtUpper)) {
+                    // on l'ajoute à notre selection
+                    recipesSelection.push(recipesJson.recipes[indexRecipe]);
+                    // et on sort de la boucle
+                    indexIngredient = ingredientsLength;
+                }
             }
-        });
+        }
     }
 
-    return argTrouve;
+    return recipesSelection;
 }
 
 /**
