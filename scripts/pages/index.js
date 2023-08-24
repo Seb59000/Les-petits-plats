@@ -1,4 +1,6 @@
-let btnCancelHidden = false;
+import { recipeFactory } from "../factories/recipe.js";
+import { EventListenersMainSearch } from "../utils/mainSearchManager.js";
+import { InitFilters } from "../utils/tagManager.js";
 
 /**
  * Récupération des recettes depuis le fichier JSON
@@ -11,9 +13,9 @@ export async function GetRecipesFromJson() {
 }
 
 /** 
- * Affichage les recettes 
+ * Affichage des recettes 
 */
-function DisplayRecipes(recipes, value) {
+export function DisplayRecipes(recipes, value) {
     DisplayNbOfRescipes(recipes);
 
     const recipesSection = document.getElementById("recipes-container");
